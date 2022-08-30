@@ -1,5 +1,5 @@
 <template>
-    <ContentField>
+    <ContentField v-if="!$store.state.user.pulling_info">
         <div class="row justify-content-md-center">
             <div class="col-3">
                 <form @submit.prevent = "login">
@@ -24,7 +24,7 @@
 <script>
 import ContentField from '../../../components/ContentField.vue'
 import { useStore } from 'vuex'
-import {ref} from 'vue'
+import { ref } from 'vue'
 import router from '@/router/index'
 
 export default {
@@ -37,8 +37,24 @@ export default {
         let password = ref('');
         let error_message = ref('');
 
+        const jwt_token = localStorage.getItem("jwt_token");
+        if(jwt_token){
+            store.commit("updateToken", jwt_token);
+            store.dispatch("getinfo", {
+                success() {
+                    router.push({name: "home"});
+                    store.commit("updatePullinginfo", false);
+                },
+                error() {
+                    store.commit("updatePullinginfo", false);
+                }
+            })
+        }else{
+            store.commit("updatePullinginfo", false);
+        }
+
         const login=() =>{
-            error_message = "",
+            error_message.value = "",
             store.dispatch("login",{
                 username:username.value,
                 password:password.value,
@@ -46,12 +62,11 @@ export default {
                     store.dispatch("getinfo", {
                         success() {
                             router.push({name:'home'});
-                            console.log(store.state.user);
                         }
-                    })
+                    });
                 },
                 error(){
-                    error_message.value="用户名或密码错误";
+                    error_message.value = "用户名或密码错误";
                 }
             })
         }
