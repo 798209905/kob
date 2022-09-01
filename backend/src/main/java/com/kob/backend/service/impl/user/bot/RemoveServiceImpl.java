@@ -39,7 +39,7 @@ public class RemoveServiceImpl implements RemoveService {
             return map;
         }
 
-        if(bot.getUserId().equals(user.getId())){
+        if(!bot.getUserId().equals(user.getId())){
             map.put("error_message","没有权限删除该Bot");
             return map;
         }
