@@ -6,6 +6,6 @@ package com.kob.matchingsystem.service;
  * @date 2022/9/3 12:39
  */
 public interface MatchingService {
-    String addPlayer(Integer userId, Integer rating);
+    String addPlayer(Integer userId, Integer rating, Integer botId);
     String removePlayer(Integer userId);
 }
