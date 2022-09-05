@@ -18,7 +18,7 @@ public class AddController {
     @Autowired
     private AddService addService; //注入接口
 
-    @PostMapping("/user/bot/add/")
+    @PostMapping("/api/user/bot/add/")
     public Map<String,String> add(@RequestParam Map<String, String> data){
         return addService.add(data);
     }
