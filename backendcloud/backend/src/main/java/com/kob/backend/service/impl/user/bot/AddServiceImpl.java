@@ -1,5 +1,6 @@
 package com.kob.backend.service.impl.user.bot;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.kob.backend.mapper.BotMapper;
 import com.kob.backend.pojo.Bot;
 import com.kob.backend.pojo.User;
@@ -59,6 +60,13 @@ public class AddServiceImpl implements AddService {
         }
         if(description.length() > 10001){
             map.put("error_message", "代码长度小于10000");
+            return map;
+        }
+
+        QueryWrapper<Bot> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id", user.getId());
+        if(botMapper.selectCount(queryWrapper) >= 5){
+            map.put("error_message","最多只能创建五个Bot，想要再创建，得加钱（不是，开玩笑的:)");
             return map;
         }
 
